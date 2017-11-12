@@ -4,12 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var busboy = require('connect-busboy');
 var path = require('path');
 var fs = require('fs-extra');
 
 var index = require('./routes/index');
-var upload = require('./routes/upload');
+var users = require('./routes/users');
 
 var app = express();
 
@@ -24,9 +25,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(busboy());
+app.use(express.static(path.join(__dirname, 'app')));
+app.use(express.static(path.join(__dirname, '.tmp'))); //TODO
 
 app.use('/', index);
-app.use('/upload', upload);
+//app.use('/users', users);
+
+app.route('/upload')
+  .post(function (req, res) {
+    req.pipe(req.busboy);
+    req.busboy.on('file', function (fieldname, file, filename) {
+      var stream = fs.createWriteStream(__dirname + '/upload/' + filename);
+      file.pipe(stream);
+      stream.on('close', function () {
+        console.log('File ' + filename + ' is uploaded');
+        res.json({
+          filename: filename
+        });
+      });
+    });
+  });
 
 
 // catch 404 and forward to error handler
