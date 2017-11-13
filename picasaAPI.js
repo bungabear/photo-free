@@ -36,7 +36,7 @@ function getAlbumList(){
 }
 
 function checkFiletype(mediaPath){
-  console.log(mediaPath.length);
+  // console.log(mediaPath.length);
   for(i = mediaPath.length - 1; i>=0; i--)
   {
     if(mediaPath[i] == '.')
