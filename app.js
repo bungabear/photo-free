@@ -14,8 +14,7 @@ var users = require('./routes/users');
 
 var oauth2 = require('./oauth2.js');
 var picasa = require('./picasaAPI.js');
-
-
+var googl = require('goo.gl');
 
 var app = express();
 
@@ -34,6 +33,12 @@ app.use(busboy());
 app.use(express.static(path.join(__dirname, 'app')));
 app.use(express.static(path.join(__dirname, '.tmp'))); //TODO
 
+app.get("/string", function(req, res) {
+    var strings = ["rad", "bla", "ska"];
+    var n = Math.floor(Math.random() * strings.length);
+    res.send(strings[n]);
+});
+
 app.use('/', index);
 //app.use('/users', users);
 
@@ -49,7 +54,7 @@ app.route('/upload')
           filename: filename
         });
         var project_key = JSON.parse(fs.readFileSync('./project_key.json').toString('utf-8'));
-        //토큰이 만료되거나 만료가 임박하면, 갱신하고 저장
+        //토큰이 만료되거나 만료가 임박하면, 갱신
         if(project_key.expires_in*1 - new Date().getTime() < 600)
         {
           var new_token = oauth2.refreshAccessToken(project_key.client_id, project_key.client_secret, project_key.refresh_token);
@@ -58,15 +63,37 @@ app.route('/upload')
           // fs.writeFileSync('./project_key.json', JSON.stringify(project_key), null);
         }
         var uploadedMedia = picasa.mediaUpload( './upload/'+ filename, project_key.access_token, project_key.public_album_id, filename);
-        console.log(uploadedMedia);
+        //console.log(uploadedMedia);
         // uploadedMedia.content.src
         // uploadedMedia.id
         // uploadedMedia.timestamp
 
+        googl.setKey(project_key.goo_gl_key);
+        var url = null;
+        var sync = true;
+        googl.shorten(uploadedMedia.content.src).then(function (shortUrl) {
+          sync = false;
+          url = shortUrl;
+        });
+        while(sync){require('deasync').sleep('10');}
+        console.log(url);
+        //url;
       });
     });
   });
 
+  var http = require('http').Server(app);
+  var io = require('socket.io')(http);
+
+  io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+      console.log('user disconnected');
+    });
+  });
+  http.listen(3001, function(){
+    console.log('listening on *:3001');
+  });
 
 
 // catch 404 and forward to error handler
