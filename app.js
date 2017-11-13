@@ -50,9 +50,9 @@ app.route('/upload')
       file.pipe(stream);
       stream.on('close', function () {
         console.log('File ' + filename + ' is uploaded');
-        res.json({
-          filename: filename
-        });
+        // res.json({
+        //   filename: filename
+        // });
         var project_key = JSON.parse(fs.readFileSync('./project_key.json').toString('utf-8'));
         //토큰이 만료되거나 만료가 임박하면, 갱신
         if(project_key.expires_in*1 - new Date().getTime() < 600)
@@ -77,24 +77,11 @@ app.route('/upload')
         });
         while(sync){require('deasync').sleep('10');}
         console.log(url);
+        res.json({result:url});
         //url;
       });
     });
   });
-
-  var http = require('http').Server(app);
-  var io = require('socket.io')(http);
-
-  io.on('connection', function(socket){
-    console.log('a user connected');
-    socket.on('disconnect', function(){
-      console.log('user disconnected');
-    });
-  });
-  http.listen(3001, function(){
-    console.log('listening on *:3001');
-  });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

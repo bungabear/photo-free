@@ -13,7 +13,7 @@ angular
         });
 
         // FILTERS
-      
+
         // a sync filter
         uploader.filters.push({
             name: 'syncFilter',
@@ -22,7 +22,7 @@ angular
                 return this.queue.length < 10;
             }
         });
-      
+
         // an async filter
         uploader.filters.push({
             name: 'asyncFilter',
@@ -54,6 +54,8 @@ angular
         };
         uploader.onSuccessItem = function(fileItem, response, status, headers) {
             console.info('onSuccessItem', fileItem, response, status, headers);
+            // json 형태로 url이 넘어온다. response.reslut
+            console.log(response);
         };
         uploader.onErrorItem = function(fileItem, response, status, headers) {
             console.info('onErrorItem', fileItem, response, status, headers);
