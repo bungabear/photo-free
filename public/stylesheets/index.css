@@ -1,0 +1,20 @@
+@import url('//fonts.googleapis.com/css?family=Orbitron');
+
+#title>h2{font-family: 'Orbitron', sans-serif; text-align: center; }
+
+#menu li{padding-left: 0; padding-right: 0; text-align: center;}
+
+#url{margin-top: 20px; margin-bottom: 20px; font-size: 200%}
+
+#pass{margin-top: 20px; margin-bottom: 20px; font-size: 200%}
+
+.btn-default {
+    font-size: 150%;
+    border-radius: 8px;
+}
+
+.my-drop-zone { border: dotted 3px lightgray; }
+.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+.another-file-over-class { border: dotted 3px green; }
+
+html, body { height: 100%; }
