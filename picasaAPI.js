@@ -1,15 +1,7 @@
-var oauth2 = require('./oauth2.js');
+// var oauth2 = require('./oauth2.js');
 var fs = require('fs');
 var Picasa = require('picasa');
 var picasa = new Picasa();
-
-var project_key = JSON.parse(fs.readFileSync('./project_key.json'));
-
-var config = {
-  clientId     : project_key.client_id,
-  redirectURI  : project_key.redirect_uri,
-  clientSecret : project_key.client_secret
-};
 
 //var token = oauth2.refreshAccessToken(client_id, client_secret, refresh_token);
 // console.log(token);
@@ -18,7 +10,6 @@ var config = {
 
 
 
-fs.writeFileSync('project_key.json',JSON.stringify(project_key));
 /* ------- 함수 정의 ----------*/
 function getAlbumList(){
   var args = {
@@ -79,12 +70,12 @@ function contentType(mediaPath){
 }
 
 // sync 함수
-function mediaUpload(mediaPath, access_token){
+function mediaUpload(mediaPath, access_token, public_album_id, filename){
   var mediaBinary = fs.readFileSync(mediaPath);
   // 미디어 확장자 체크.
   var media = {
-    title : 'title',  // 파일명 입력
-    summary : 'summery',  // 파일 태그 확인
+    title : filename,  // 파일명 입력
+    summary : '',  // 파일 태그 확인
     contentType : contentType(mediaPath), //확장자 입력
     binary : mediaBinary
   };
@@ -98,7 +89,7 @@ function mediaUpload(mediaPath, access_token){
   var uploadedMedia = null;
   picasa.postPhoto(access_token, public_album_id, media,
     function (err, media){
-      console.log(err, media);
+      // console.log(err, media);
       uploadedMedia = media;
       sync = false;
       //단축 URL생성
@@ -128,3 +119,6 @@ function mediaUpload(mediaPath, access_token){
   while(sync){require('deasync').sleep(10);}
   return uploadedMedia;
 }
+
+
+exports.mediaUpload = mediaUpload;

@@ -12,6 +12,11 @@ var fs = require('fs-extra');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var oauth2 = require('./oauth2.js');
+var picasa = require('./picasaAPI.js');
+
+
+
 var app = express();
 
 // view engine setup
@@ -43,9 +48,25 @@ app.route('/upload')
         res.json({
           filename: filename
         });
+        var project_key = JSON.parse(fs.readFileSync('./project_key.json').toString('utf-8'));
+        //토큰이 만료되거나 만료가 임박하면, 갱신하고 저장
+        if(project_key.expires_in*1 - new Date().getTime() < 600)
+        {
+          var new_token = oauth2.refreshAccessToken(project_key.client_id, project_key.client_secret, project_key.refresh_token);
+          project_key.access_token = new_token.access_token;
+          project_key.expires_in = new_token.expires_in;
+          // fs.writeFileSync('./project_key.json', JSON.stringify(project_key), null);
+        }
+        var uploadedMedia = picasa.mediaUpload( './upload/'+ filename, project_key.access_token, project_key.public_album_id, filename);
+        console.log(uploadedMedia);
+        // uploadedMedia.content.src
+        // uploadedMedia.id
+        // uploadedMedia.timestamp
+
       });
     });
   });
+
 
 
 // catch 404 and forward to error handler
