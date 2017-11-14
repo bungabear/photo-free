@@ -50,9 +50,6 @@ app.route('/upload')
       file.pipe(stream);
       stream.on('close', function () {
         console.log('File ' + filename + ' is uploaded');
-        // res.json({
-        //   filename: filename
-        // });
         var project_key = JSON.parse(fs.readFileSync('./project_key.json').toString('utf-8'));
         //토큰이 만료되거나 만료가 임박하면, 갱신
         if(project_key.expires_in*1 - new Date().getTime() < 600)
@@ -63,10 +60,6 @@ app.route('/upload')
           // fs.writeFileSync('./project_key.json', JSON.stringify(project_key), null);
         }
         var uploadedMedia = picasa.mediaUpload( './upload/'+ filename, project_key.access_token, project_key.public_album_id, filename);
-        //console.log(uploadedMedia);
-        // uploadedMedia.content.src
-        // uploadedMedia.id
-        // uploadedMedia.timestamp
 
         googl.setKey(project_key.goo_gl_key);
         var url = null;
@@ -78,7 +71,7 @@ app.route('/upload')
         while(sync){require('deasync').sleep('10');}
         console.log(url);
         res.json({result:url});
-        //url;
+        fs.unlinkSync('./upload/'+ filename);
       });
     });
   });

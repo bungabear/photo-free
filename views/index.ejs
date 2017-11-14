@@ -8,150 +8,96 @@
     <link rel="stylesheet" href="stylesheets/index.css">
     <script src="javascripts/prefixfree.min.js"></script>
     <script src="javascripts/index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+
     <script src="http://code.angularjs.org/1.2.0/angular.min.js"></script>
-    
+
     <script src="javascripts/angular-file-upload.min.js"></script>
-    
+
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    
+
     <script src="javascripts/console-sham.js"></script>
-    
+
     <script src="javascripts/controllers.js"></script>
-    
+
     <!-- Fix for old browsers -->
     <script src="http://nervgh.github.io/js/es5-shim.min.js"></script>
     <script src="http://nervgh.github.io/js/es5-sham.min.js"></script>
-    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 
 </head>
 <body ng-controller="AppController" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
   <div id="title" class="container">
       <h2>Photo-Free</h2>
   </div>
-  
-  <div id="menu" class="container">
-    <ul class="nav nav-tabs">
-    <li class="active col-xs-3"><a data-toggle="tab" href="#list">List</a></li>
-    <li class="col-xs-3"><a data-toggle="tab" href="#image">Image </a></li>
-    <li class="col-xs-3"><a data-toggle="tab" href="#video">Video </a></li>
-    <li class="col-xs-3"><a data-toggle="tab" href="#delete">Delete</a></li>
-    </ul>
-  </div>
+  <div class="container">
 
-  <div id="main" class="tab-content container">
-    <div id="list" class="tab-pane fade in active">
-      <h3>List</h3>
-    
-    </div>
-    <div id="image" class="tab-pane fade">
-      <h3>Image Upload</h3>
-       <div ng-show="uploader.isHTML5">
-            <!-- 3. nv-file-over uploader="link" over-class="className" -->
-            <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
-            Base drop zone
-            </div>
-
-            <!-- Example: nv-file-drop="" uploader="{Object}" options="{Object}" filters="{String}" -->
-            <div nv-file-drop="" uploader="uploader" options="{ url: '/upload' }">
-            <div nv-file-over="" uploader="uploader" over-class="another-file-over-class" class="well my-drop-zone">
-            Another drop zone with its own settings
-            </div>
-            </div>
+   <div ng-show="uploader.isHTML5">
+        <!-- Example: nv-file-drop="" uploader="{Object}" options="{Object}" filters="{String}" -->
+        <div nv-file-drop="" uploader="uploader" options="{ url: '/upload' }">
+        <div nv-file-over="" id = "zone" uploader="uploader" over-class="another-file-over-class" class="well my-drop-zone">
+        이미지를 끌어 놓아주세요
         </div>
-        
-        <h3>Upload queue</h3>
-        <p>Queue length: {{ uploader.queue.length }}</p>
-
-        <table class="table">
-        <thead>
-            <tr>
-            <th width="50%">Name</th>
-            <th ng-show="uploader.isHTML5">Size</th>
-            <th ng-show="uploader.isHTML5">Progress</th>
-            <th>Status</th>
-            <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="item in uploader.queue">
-            <td><strong>{{ item.file.name }}</strong></td>
-            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-            <td ng-show="uploader.isHTML5">
-              <div class="progress" style="margin-bottom: 0;">
-                <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-              </div>
-            </td>
-            <td class="text-center">
-              <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-              <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-              <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-            </td>
-            <td nowrap>
-              <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                <span class="glyphicon glyphicon-upload"></span> Upload
-              </button>
-              <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-              </button>
-              <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                <span class="glyphicon glyphicon-trash"></span> Remove
-              </button>
-            </td>
-            </tr>
-        </tbody>
-        </table>
-
-        <div>
-            <div> Queue progress:
-              <div class="progress" style="">
-              <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
-              </div>
-            </div>
-            <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-              <span class="glyphicon glyphicon-upload"></span> Upload all
-            </button>
-            <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
-              <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-            </button>
-            <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-              <span class="glyphicon glyphicon-trash"></span> Remove all
-            </button>
         </div>
+    </div>
 
-        
-    </div>
-    <div id="video" class="tab-pane fade">
-      <h3>Video Upload</h3>
-      
-    </div>
-    <div id="delete" class="tab-pane fade container">
-      <h3>Delete</h3>
-      <form action="post">
-          <div class="form-group">
-          <div class="row"><div class="col-xs-2"></div>
-          <label for="url"> <h3>URL</h3></label></div>
-          <div class="row"><div class="col-xs-2"></div>
-          <input class="col-xs-8" id="url" type="text" placeholder="URL입력"></div>
+    <h3>업로드 파일 목록</h3>
+    <p>업로드 파일 수: {{ uploader.queue.length }}</p>
+
+    <table class="table">
+    <thead>
+        <tr>
+        <th width="50%">이름</th>
+        <th ng-show="uploader.isHTML5">크기</th>
+        <th ng-show="uploader.isHTML5">진행도</th>
+        <th>상태</th>
+        <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in uploader.queue">
+        <td><strong>{{ item.file.name }}</strong></td>
+        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+        <td ng-show="uploader.isHTML5">
+          <div class="progress" style="margin-bottom: 0;">
+            <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
           </div>
-          <div class="form-group">
-          <div class="row"><div class="col-xs-2"></div>
-          <label  for="pass"><h3>Password</h3></label></div>
-          <div class="row"><div class="col-xs-2"></div>
-          <input class="col-xs-8" id="pass" type="password" placeholder="비밀번호 입력"></div>
+        </td>
+        <td class="text-center">
+          <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+          <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+          <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+        </td>
+        <td nowrap>
+          <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+            <span class="glyphicon glyphicon-upload"></span> 업로드
+          </button>
+          <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+            <span class="glyphicon glyphicon-trash"></span> 삭제
+          </button>
+        </td>
+        </tr>
+    </tbody>
+    </table>
+
+    <div>
+        <div> 전체 진행도:
+          <div class="progress" style="">
+          <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
           </div>
-          <div class="form-group">
-          <div class="col-xs-9"></div>
-          <input type="submit" id="submit" name="submit" value="Delete" class="col-xs-1 btn-default">
-          </div>
-      </form>
+        </div>
+        <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+          <span class="glyphicon glyphicon-upload"></span> 모두 업로드
+        </button>
+        <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+          <span class="glyphicon glyphicon-trash"></span> 모두 삭제
+        </button>
     </div>
-  </div>
-</body>
-</html>
+    </div>
+  </body>
+  </html>

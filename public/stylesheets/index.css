@@ -12,8 +12,8 @@
     font-size: 150%;
     border-radius: 8px;
 }
-
-.my-drop-zone { border: dotted 3px lightgray; }
+.table{ margin-top: 20px;}
+#zone { border: dotted 3px lightgray; margin-top: 25px; padding: 25px; text-align: center;}
 .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
 .another-file-over-class { border: dotted 3px green; }
 
