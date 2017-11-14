@@ -69,7 +69,6 @@ app.route('/upload')
           url = shortUrl;
         });
         while(sync){require('deasync').sleep('10');}
-        console.log(url);
         res.json({result:url});
         fs.unlinkSync('./upload/'+ filename);
       });

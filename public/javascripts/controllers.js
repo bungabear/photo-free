@@ -61,8 +61,9 @@ angular
         };
         uploader.onSuccessItem = function(fileItem, response, status, headers) {
             console.info('onSuccessItem', fileItem, response, status, headers);
-            // json 형태로 url이 넘어온다. response.reslut
+            // json 형태로 url이 넘어온다. response.result
             console.log(response);
+            myFunction(response.result, fileItem);
         };
         uploader.onErrorItem = function(fileItem, response, status, headers) {
             console.info('onErrorItem', fileItem, response, status, headers);
