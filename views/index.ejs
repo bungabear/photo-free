@@ -52,7 +52,8 @@
     <table class="table">
     <thead>
         <tr>
-        <th width="50%">이름</th>
+        <th width="30%">이름</th>
+        <th>생성된 URL</th>
         <th ng-show="uploader.isHTML5">크기</th>
         <th ng-show="uploader.isHTML5">진행도</th>
         <th>상태</th>
@@ -61,7 +62,8 @@
     </thead>
     <tbody>
         <tr ng-repeat="item in uploader.queue">
-        <td><strong>{{ item.file.name }}</strong></td>
+        <td class="filename"><strong>{{ item.file.name }}</strong></td>
+        <td class="url"></td>
         <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
         <td ng-show="uploader.isHTML5">
           <div class="progress" style="margin-bottom: 0;">
@@ -84,6 +86,25 @@
         </tr>
     </tbody>
     </table>
+
+    <p id="result">
+    </p>
+
+    <script>
+function myFunction(data, fileItem) {
+  var table = document.getElementsByClassName("table")[0]
+    for(var i = 1; i < table.rows.length; i++) {
+      console.log(table.rows[i].cells[0].innerText);
+      console.log(fileItem.file.name);
+      if(table.rows[i].cells[0].innerText == fileItem.file.name) {
+        if(table.rows[i].cells[1].innerText == ""){
+          table.rows[i].cells[1].innerHTML = `<a href=${data}>${fileItem.file.name}</a>`
+          break;
+        }
+      }
+    }
+}
+</script>
 
     <div>
         <div> 전체 진행도:
