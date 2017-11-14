@@ -41,10 +41,11 @@
         <!-- Example: nv-file-drop="" uploader="{Object}" options="{Object}" filters="{String}" -->
         <div nv-file-drop="" uploader="uploader" options="{ url: '/upload' }">
         <div nv-file-over="" id = "zone" uploader="uploader" over-class="another-file-over-class" class="well my-drop-zone">
-        이미지를 끌어 놓아주세요
+        이미지를 여기에 끌어 넣거나 아래에서 선택해주세요.
         </div>
         </div>
     </div>
+    <input type="file" nv-file-select="" uploader="uploader" multiple accept=".gif,.jpg,.jpeg,.png">
 
     <h3>업로드 파일 목록</h3>
     <p>업로드 파일 수: {{ uploader.queue.length }}</p>
