@@ -98,7 +98,7 @@ function myFunction(data, fileItem) {
       console.log(fileItem.file.name);
       if(table.rows[i].cells[0].innerText == fileItem.file.name) {
         if(table.rows[i].cells[1].innerText == ""){
-          table.rows[i].cells[1].innerHTML = `<a href=${data}>${fileItem.file.name}</a>`
+          table.rows[i].cells[1].innerHTML = `<a href=${data} target="_blank>${data}</a>`
           break;
         }
       }
