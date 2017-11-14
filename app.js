@@ -33,6 +33,19 @@ app.use(busboy());
 app.use(express.static(path.join(__dirname, 'app')));
 app.use(express.static(path.join(__dirname, '.tmp'))); //TODO
 
+
+console.log('remove upload folder\'s files...');
+fs.readdir('./upload', (err, files) => {
+  if (err) throw err;
+  for (const file of files) {
+    fs.unlink('./upload/' + file, err => {
+      if (err) throw err;
+    });
+  }
+  console.log('remove complete');
+});
+
+
 app.get("/string", function(req, res) {
     var strings = ["rad", "bla", "ska"];
     var n = Math.floor(Math.random() * strings.length);
